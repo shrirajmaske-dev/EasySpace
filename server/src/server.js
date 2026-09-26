@@ -67,6 +67,18 @@ app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
+
+  // Restore original request path if Vercel rewrote req.url
+  const matchedPath = req.headers['x-matched-path'] || req.headers['x-forwarded-uri'];
+  if (matchedPath && (req.url.includes('[...path]') || req.url === '/api/index.js' || req.url === '/api')) {
+    req.url = matchedPath;
+  } else if (req.query && req.query.path) {
+    const queryPath = Array.isArray(req.query.path) ? req.query.path.join('/') : req.query.path;
+    if (queryPath) {
+      req.url = `/api/${queryPath}`;
+    }
+  }
+
   next();
 });
 
