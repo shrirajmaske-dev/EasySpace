@@ -342,6 +342,7 @@ export class MasteryService {
       return {
         ...rec,
         elapsedDays,
+        lastTestedDaysAgo: elapsedDays,
         decayRisk
       };
     });

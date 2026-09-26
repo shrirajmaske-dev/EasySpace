@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const useMasteryStore = create((set, get) => ({
+export const useMasteryStore = create((set) => ({
   // Active Path & Video
   currentPath: null,
   currentVideos: [],

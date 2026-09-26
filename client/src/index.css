@@ -68,58 +68,56 @@
 }
 
 /* Light Mode Global Adaptive Color Fallbacks */
-html:not(.dark) {
-  /* Typography adaptivity */
-  & .text-white {
-    color: #0f172a;
-  }
-  & .text-slate-100 {
-    color: #0f172a;
-  }
-  & .text-slate-200 {
-    color: #1e293b;
-  }
-  & .text-slate-300 {
-    color: #334155;
-  }
-  & .text-slate-400 {
-    color: #64748b;
-  }
+/* Typography adaptivity */
+html:not(.dark) .text-white {
+  color: #0f172a;
+}
+html:not(.dark) .text-slate-100 {
+  color: #0f172a;
+}
+html:not(.dark) .text-slate-200 {
+  color: #1e293b;
+}
+html:not(.dark) .text-slate-300 {
+  color: #334155;
+}
+html:not(.dark) .text-slate-400 {
+  color: #64748b;
+}
 
-  /* Maintain white text on saturated colored badges and buttons */
-  & button.text-white,
-  & button.text-slate-950,
-  & [class*="bg-gradient-"][class*="text-white"],
-  & [class*="bg-rose-600"],
-  & [class*="bg-rose-500"].text-white,
-  & [class*="bg-emerald-600"],
-  & [class*="bg-indigo-600"],
-  & [class*="bg-purple-600"],
-  & [class*="bg-cyan-500"][class*="text-slate-950"],
-  & .btn-text-white {
-    color: inherit;
-  }
+/* Maintain white text on saturated colored badges and buttons */
+html:not(.dark) button.text-white,
+html:not(.dark) button.text-slate-950,
+html:not(.dark) [class*="bg-gradient-"][class*="text-white"],
+html:not(.dark) [class*="bg-rose-600"],
+html:not(.dark) [class*="bg-rose-500"].text-white,
+html:not(.dark) [class*="bg-emerald-600"],
+html:not(.dark) [class*="bg-indigo-600"],
+html:not(.dark) [class*="bg-purple-600"],
+html:not(.dark) [class*="bg-cyan-500"][class*="text-slate-950"],
+html:not(.dark) .btn-text-white {
+  color: inherit;
+}
 
-  /* Inputs in light mode */
-  & input,
-  & textarea,
-  & select {
-    background-color: #ffffff !important;
-    border-color: #cbd5e1 !important;
-    color: #0f172a !important;
-  }
+/* Inputs in light mode */
+html:not(.dark) input,
+html:not(.dark) textarea,
+html:not(.dark) select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
 
-  & input::placeholder {
-    color: #94a3b8 !important;
-  }
+html:not(.dark) input::placeholder {
+  color: #94a3b8 !important;
+}
 
-  /* Light mode borders */
-  & .border-white\/\[0\.08\],
-  & .border-white\/\[0\.06\],
-  & .border-white\/\[0\.1\],
-  & .border-white\/\[0\.12\] {
-    border-color: #e2e8f0;
-  }
+/* Light mode borders */
+html:not(.dark) .border-white\/\[0\.08\],
+html:not(.dark) .border-white\/\[0\.06\],
+html:not(.dark) .border-white\/\[0\.1\],
+html:not(.dark) .border-white\/\[0\.12\] {
+  border-color: #e2e8f0;
 }
 
 /* Background Tech Grid */
@@ -267,48 +265,56 @@ html.dark ::-webkit-scrollbar-thumb:hover {
 html:not(.dark) .text-gradient-brand {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #4f46e5 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html.dark .text-gradient-brand {
   background: linear-gradient(135deg, #38bdf8 0%, #22d3ee 40%, #818cf8 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html:not(.dark) .text-gradient-accent {
   background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html.dark .text-gradient-accent {
   background: linear-gradient(135deg, #c084fc 0%, #f472b6 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html:not(.dark) .text-gradient-amber {
   background: linear-gradient(135deg, #d97706 0%, #ea580c 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html.dark .text-gradient-amber {
   background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html:not(.dark) .text-gradient-emerald {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 html.dark .text-gradient-emerald {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

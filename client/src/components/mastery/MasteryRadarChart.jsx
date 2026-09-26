@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '../common/Card.jsx';
-import { Award, Zap, TrendingUp, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const MasteryRadarChart = ({ radarData = [] }) => {
   // If no data, use standard STEM topics
@@ -124,10 +124,9 @@ export const MasteryRadarChart = ({ radarData = [] }) => {
                   cy={y}
                   r="5"
                   fill="#0284c7"
-                  className="dark:fill-[#00f2fe]"
                   stroke="#ffffff"
                   strokeWidth="2"
-                  className="cursor-pointer transition-all hover:scale-125"
+                  className="dark:fill-[#00f2fe] cursor-pointer transition-all hover:scale-125"
                 />
               </g>
             );

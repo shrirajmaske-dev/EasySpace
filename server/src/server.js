@@ -15,6 +15,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
+// Trust proxy for Vercel and reverse proxy environments (ensures correct IP rate-limiting)
+app.set('trust proxy', 1);
+
 // Security Headers
 app.use(
   helmet({
@@ -35,10 +38,14 @@ app.use(
         'http://127.0.0.1:5173',
         'http://localhost:3000'
       ];
-      if (allowedOrigins.indexOf(origin) !== -1 || origin.startsWith('http://localhost:')) {
+      if (
+        allowedOrigins.indexOf(origin) !== -1 ||
+        origin.startsWith('http://localhost:') ||
+        origin.endsWith('.vercel.app')
+      ) {
         return callback(null, true);
       }
-      return callback(null, true); // Permissive in development
+      return callback(null, true); // Permissive in deployment
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -53,8 +60,11 @@ app.use(express.urlencoded({ extended: true }));
 // Apply general rate limiting
 app.use(generalRateLimiter);
 
+// Central API Router (compatible with both /api/v1 and serverless /v1 mounts)
+const apiRouter = express.Router();
+
 // Health check endpoint
-app.get('/api/v1/health', (req, res) => {
+apiRouter.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
     service: 'EasySpace Backend API',
@@ -63,11 +73,26 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
-// Primary API V1 Routes
-app.use('/api/v1/curate', curationRoutes);
-app.use('/api/v1/diagnostic', diagnosticRoutes);
-app.use('/api/v1/remediation', remediationRoutes);
-app.use('/api/v1/mastery', masteryRoutes);
+// Primary API Routes
+apiRouter.use('/curate', curationRoutes);
+apiRouter.use('/diagnostic', diagnosticRoutes);
+apiRouter.use('/remediation', remediationRoutes);
+apiRouter.use('/mastery', masteryRoutes);
+
+// Mount API routes under /api/v1 and /v1 (for direct or rewritten serverless routing)
+app.use('/api/v1', apiRouter);
+app.use('/v1', apiRouter);
+app.use('/api', apiRouter);
+
+// Root health check fallback
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    service: 'EasySpace Backend API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
+});
 
 // 404 Route Handler
 app.use((req, res) => {
@@ -88,13 +113,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Server Initialization
-app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🚀 EasySpace Backend running on http://localhost:${PORT}`);
-  console.log(`📡 API V1 Base: http://localhost:${PORT}/api/v1`);
-  console.log(`🛡️  Security: Helmet & Rate Limiter active`);
-  console.log(`====================================================`);
-});
+// Server Initialization (Only listen directly when not executed as a serverless function)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 EasySpace Backend running on http://localhost:${PORT}`);
+    console.log(`📡 API V1 Base: http://localhost:${PORT}/api/v1`);
+    console.log(`🛡️  Security: Helmet & Rate Limiter active`);
+    console.log(`====================================================`);
+  });
+}
 
 export default app;

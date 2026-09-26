@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { 
   BarChart3, 
   Sparkles, 
-  Award, 
   AlertTriangle, 
   CheckCircle2, 
   Clock, 
@@ -14,8 +13,6 @@ import {
   ShieldAlert,
   ArrowRight,
   Search,
-  BookOpen,
-  Calendar,
   Layers
 } from 'lucide-react';
 import { masteryApi } from '../api/mastery.js';
@@ -116,6 +113,17 @@ export const MasteryLedgerPage = () => {
     }
   };
 
+  if (loading && !ledger) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
+        <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center animate-spin shadow-glow-cyan">
+          <div className="w-4 h-4 rounded-full bg-cyan-400" />
+        </div>
+        <p className="text-xs text-slate-400 font-mono tracking-wider">RETRIEVING COGNITIVE MASTERY LEDGER...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 print:p-0 print:m-0">
       
@@ -193,7 +201,7 @@ export const MasteryLedgerPage = () => {
                         </span>
                       </div>
                       <span className="text-[11px] text-slate-400 font-mono">
-                        {concept.topic} • Last Tested: {concept.lastTestedDaysAgo} days ago
+                        {concept.topic} • Last Tested: {concept.lastTestedDaysAgo ?? concept.elapsedDays ?? 0} days ago
                       </span>
                     </div>
 
@@ -247,6 +255,24 @@ export const MasteryLedgerPage = () => {
                 className="w-full bg-surface-950/80 border border-white/[0.08] rounded-xl px-3 py-2 pl-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
               />
             </div>
+
+            {/* Topic Filter Dropdown */}
+            {topicsList.length > 0 && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-950 rounded-xl border border-white/[0.08]">
+                <Filter className="w-3.5 h-3.5 text-slate-400" />
+                <select
+                  value={filterTopic}
+                  onChange={(e) => setFilterTopic(e.target.value)}
+                  className="bg-transparent text-xs font-bold text-slate-300 focus:outline-none cursor-pointer"
+                  aria-label="Filter by Topic"
+                >
+                  <option value="ALL" className="bg-surface-900 text-slate-200">All Topics</option>
+                  {topicsList.map((t) => (
+                    <option key={t} value={t} className="bg-surface-900 text-slate-200">{t}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Status Filter Buttons */}
             <div className="flex items-center gap-1 p-1 bg-surface-950 rounded-xl border border-white/[0.08]">
