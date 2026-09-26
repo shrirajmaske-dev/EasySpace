@@ -1,9 +1,11 @@
 import { apiClient } from './client.js';
 import axios from 'axios';
 
+const rawN8nUrl = import.meta.env.VITE_N8N_SEARCH_WEBHOOK_URL?.trim();
 const N8N_WEBHOOK_URL =
-  import.meta.env.VITE_N8N_SEARCH_WEBHOOK_URL ||
-  'https://ladepranav7.app.n8n.cloud/webhook/learnlens/search';
+  (rawN8nUrl && rawN8nUrl.startsWith('http'))
+    ? rawN8nUrl
+    : 'https://ladepranav7.app.n8n.cloud/webhook/learnlens/search';
 
 export const learningPathsApi = {
   getDomains: async () => {

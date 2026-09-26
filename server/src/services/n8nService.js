@@ -4,9 +4,11 @@ import crypto from 'crypto';
 
 dotenv.config();
 
+const rawN8nUrl = process.env.N8N_SEARCH_WEBHOOK_URL?.trim();
 const N8N_SEARCH_WEBHOOK_URL =
-  process.env.N8N_SEARCH_WEBHOOK_URL ||
-  'https://ladepranav7.app.n8n.cloud/webhook/learnlens/search';
+  (rawN8nUrl && rawN8nUrl.startsWith('http'))
+    ? rawN8nUrl
+    : 'https://ladepranav7.app.n8n.cloud/webhook/learnlens/search';
 
 export class N8nService {
   /**

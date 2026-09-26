@@ -2,14 +2,18 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL?.trim();
+const supabaseKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY)?.trim();
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl && 
   supabaseKey && 
   !supabaseUrl.includes('your-project') &&
-  supabaseUrl.startsWith('https://')
+  !supabaseUrl.includes('placeholder') &&
+  !supabaseKey.includes('your_supabase') &&
+  !supabaseKey.includes('placeholder') &&
+  supabaseUrl.startsWith('https://') &&
+  supabaseKey.length > 20
 );
 
 export const supabase = isSupabaseConfigured 

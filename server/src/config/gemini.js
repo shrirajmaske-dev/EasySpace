@@ -2,13 +2,19 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const apiKey = process.env.GEMINI_API_KEY;
+const rawApiKey = process.env.GEMINI_API_KEY?.trim();
+export const isGeminiConfigured = Boolean(
+  rawApiKey &&
+  !rawApiKey.includes('your_gemini') &&
+  !rawApiKey.includes('placeholder') &&
+  rawApiKey.length > 10
+);
 
-if (!apiKey) {
-  console.warn('[EasySpace AI Config] Warning: GEMINI_API_KEY is not defined in environment variables. Falling back to deterministic pedagogical AI synthesis engine for STEM topics.');
+if (!isGeminiConfigured) {
+  console.warn('[EasySpace AI Config] Warning: GEMINI_API_KEY is not defined or is a placeholder. Operating with deterministic academic curriculum synthesis engine for STEM topics.');
 }
 
-export const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+export const ai = isGeminiConfigured ? new GoogleGenAI({ apiKey: rawApiKey }) : null;
 
 // Standard Gemini model constants
 export const GEMINI_FLASH_MODEL = 'gemini-1.5-flash';
