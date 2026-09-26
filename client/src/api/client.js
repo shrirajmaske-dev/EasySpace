@@ -1,11 +1,17 @@
 import axios from 'axios';
 
 const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
-const API_BASE_URL = (
-  rawApiBaseUrl 
-    ? rawApiBaseUrl.replace(/\/+$/, '') 
-    : (import.meta.env.PROD ? '/api/v1' : 'http://localhost:5000/api/v1')
-);
+let API_BASE_URL = import.meta.env.PROD ? '/api/v1' : 'http://localhost:5000/api/v1';
+
+if (rawApiBaseUrl) {
+  const sanitized = rawApiBaseUrl.replace(/\/+$/, '');
+  // If user passed just the domain e.g. https://my-app.vercel.app, ensure /api/v1 is appended
+  if (sanitized.startsWith('http') && !sanitized.includes('/api')) {
+    API_BASE_URL = `${sanitized}/api/v1`;
+  } else {
+    API_BASE_URL = sanitized;
+  }
+}
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

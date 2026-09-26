@@ -53,6 +53,23 @@ app.use(
   })
 );
 
+// Explicit OPTIONS Preflight handler for Vercel Serverless & CORS
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-demo-mode');
+  return res.status(204).end();
+});
+
+// URL Normalization Middleware for Vercel Serverless Rewrites
+app.use((req, res, next) => {
+  // If preflight options request slipped through
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
+
 // Body Parser
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -60,7 +77,7 @@ app.use(express.urlencoded({ extended: true }));
 // Apply general rate limiting
 app.use(generalRateLimiter);
 
-// Central API Router (compatible with both /api/v1 and serverless /v1 mounts)
+// Central API Router (compatible with /api/v1, /v1, /api, and root mounts)
 const apiRouter = express.Router();
 
 // Health check endpoint
@@ -79,10 +96,11 @@ apiRouter.use('/diagnostic', diagnosticRoutes);
 apiRouter.use('/remediation', remediationRoutes);
 apiRouter.use('/mastery', masteryRoutes);
 
-// Mount API routes under /api/v1 and /v1 (for direct or rewritten serverless routing)
+// Mount API routes under /api/v1, /v1, /api, and root (for maximum routing resilience)
 app.use('/api/v1', apiRouter);
 app.use('/v1', apiRouter);
 app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Root health check fallback
 app.get('/health', (req, res) => {
