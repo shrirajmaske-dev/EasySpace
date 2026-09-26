@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "prebuild": "node ../scripts/install-linux-bindings.js || true",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview"
@@ -34,5 +35,9 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "oxlint": "^1.81.0"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "^1.2.11",
+    "lightningcss-linux-x64-gnu": "^1.33.0"
   }
 }

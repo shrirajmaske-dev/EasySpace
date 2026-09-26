@@ -15,6 +15,7 @@
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,cyan\" \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npm run dev --prefix server",
+    "prebuild": "node scripts/install-linux-bindings.js",
     "build": "npm run build --workspace=client && node scripts/build.js",
     "vercel-build": "npm run build",
     "start": "npm start --prefix server",
@@ -22,8 +23,8 @@
   },
   "dependencies": {
     "@google/genai": "^2.24.0",
-    "@supabase/supabase-js": "^2.49.1",
-    "axios": "^1.7.9",
+    "@supabase/supabase-js": "^2.117.2",
+    "axios": "^1.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -33,5 +34,9 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.4"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "^1.2.9",
+    "lightningcss-linux-x64-gnu": "^1.33.0"
   }
 }
